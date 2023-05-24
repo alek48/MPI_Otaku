@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, List
 from mpi4py import MPI
 from enum import IntEnum
 import time
@@ -31,10 +31,10 @@ comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 
 class Message:
-    def __init__(self, tag : TAGS, data : str):
+    def __init__(self, tag : TAGS, data : Any):
         global clock, rank
         self.tag : int = tag
-        self.data : str = data
+        self.data : Any = data
         self.clock : int = clock
         self.sender : int = rank
 
@@ -63,6 +63,7 @@ RoomGas : int = 0
 InhaledGas : int = 0
 WaitQueue : List[QueueMember] = []
 LastResume : int = 0
+EmptyNum : int = 0
 
 def addToQueue(rank, clock, gas):
     global WaitQueue
@@ -73,21 +74,21 @@ def removeFromQueue(rank):
     global WaitQueue
     WaitQueue = [x for x in WaitQueue if x.rank != rank]
 
-def send(tag, dest, data=""):
+def send(tag, dest, data=None):
     global clock, comm
     comm.send(Message(tag, data), dest)
     clock += 1
 
-def multisend(tag, dest, data=""):
+def multisend(tag, dest, data=None):
     global clock, comm
     for d in dest:
         comm.send(Message(tag, data), d)
     clock += 1
 
-def broadcast(tag, data=""):
+def broadcast(tag, data=None, self=False):
     global clock, comm
     for i in range(comm.Get_size()):
-        if i != rank:
+        if self or i != rank:
             comm.send(Message(tag, data), i)
     clock += 1
 
@@ -102,12 +103,11 @@ def debug(msg):
     print(f"{COLORS[rank % 3]}[{rank}][{clock}] {msg}")
 
 
-
 def onReceivePause(msg : Message):
     global RoomGas, InhaledGas, LastResume
 
     debug(f"Received: {msg}")
-    
+
     # REQ - Przechowuje wiadomość, żeby obsłużyć ją po opuszczeniu tego stanu (opisane poniżej).
     if (msg.tag == TAGS.REQ):
         messageFreezer.append(msg)
@@ -136,24 +136,60 @@ def onReceivePause(msg : Message):
 
         InhaledGas = 0
 
+def onReceiveReplacing(msg : Message):
+    global RoomGas, InhaledGas, LastResume
 
+    debug(f"Received: {msg}")
+    # REQ - Przechowuje wiadomość, żeby obsłużyć ją po opuszczeniu tego stanu.
+    if (msg.tag == TAGS.REQ):
+        messageFreezer.append(msg)
+    
+    # ACK - Ignoruje; sytuacja niemożliwa.
+    elif (msg.tag == TAGS.ACK):
+        pass
+    
+    # RELEASE - Usuwa nadawcę z WaitQueue, aktualizuje RoomGas oraz InhaledGas (opisane poniżej).
+    elif (msg.tag == TAGS.RELEASE):
+        removeFromQueue(msg.sender)
+        # TODO: update gas
+    
+    # EMPTY - Zwiększa EmptyNum o 1.
+    elif (msg.tag == TAGS.EMPTY):
+        EmptyNum += 1
+    
+    # RESUME - przechodzi do stanu REST, ustawia LastResume na zegar Lamporta tej wiadomości i ustawia InhaledGas na 0.
+    elif (msg.tag == TAGS.RESUME):
+        changeState(STATES.REST)
+        LastResume = msg.clock
+        InhaledGas = 0
 
 
 def main():
+    global comm
+
     while True:
-        debug("Waiting for recv")
-        data = receive()
+        msg = receive()
 
         if CURRENT_STATE == STATES.REST:
             pass
+
         elif CURRENT_STATE == STATES.WAIT:
             pass
+
         elif CURRENT_STATE == STATES.INSECTION:
             pass
+
         elif CURRENT_STATE == STATES.PAUSE:
-            onReceivePause(data)
+            onReceivePause(msg)
+
         elif CURRENT_STATE == STATES.REPLACING:
-            pass
+            onReceiveReplacing(msg)
+
+            # Proces i przebywa w stanie REPLACING dopóki nie otrzyma EMPTY od wszystkich innych procesów, 
+            # wtedy rozsyła on RESUME do wszystkich procesów, wliczając siebie.
+            if EmptyNum + 1 == comm.Get_size():
+                broadcast(TAGS.RESUME, self=True)
+
         else:
             debug("Invalid state")
 
