@@ -64,11 +64,15 @@ InhaledGas : int = 0
 WaitQueue : List[QueueMember] = []
 LastResume : int = 0
 EmptyNum : int = 0
+AckNum: int = 0
+S: int = 1  # ilość stanowisk w sali
+X: int = 10  # ilość cuchów, po której trzeba wymienić reprezentanta
 
 def addToQueue(rank, clock, gas):
     global WaitQueue
     WaitQueue.append( QueueMember(rank, clock, gas) )
-    WaitQueue = sorted(WaitQueue, key=lambda x : x.gas)
+    WaitQueue = sorted(WaitQueue, key=lambda x : x.clock)
+    # sortowane po zegarze, bo w takiej kolejności wpuszczamy do sali
 
 def removeFromQueue(rank):
     global WaitQueue
@@ -97,6 +101,17 @@ def receive() -> Message:
     msg : Message = comm.recv()
     clock += 1
     return msg
+
+def updateRoomGas():
+    global RoomGas, S
+    RoomGas = sum([x.gas for x in WaitQueue[:S]])
+    # potencjalny bug - co jeśli jestem w pierwszych S na liście, ale nie wszedłem do sali?
+
+def updateInhaledGas(LeaverGas):
+    global InhaledGas, X
+    InhaledGas += LeaverGas
+    if InhaledGas >= X:
+        pass  # TODO: uruchom procedurę wymiany reprezentanta
 
 def debug(msg):
     global clock, rank
@@ -164,6 +179,76 @@ def onReceiveReplacing(msg : Message):
         InhaledGas = 0
 
 
+def onReceiveRest(msg: Message):
+    debug(f"Received: {msg}")
+
+    # REQ - dodaj nadawcę do kolejki i odeślj ACK
+    if (msg.tag == TAGS.REQ):
+        addToQueue(msg.sender,msg.clock, msg.data)
+        updateRoomGas()
+
+    # ACK - sytuacja niemożliwa
+    elif (msg.tag == TAGS.ACK):
+        pass
+
+    # RELEASE - usuń nadawcę z kolejki, zaktualizuj RoomGas oraz InhaledGas
+    elif (msg.tag == TAGS.RELEASE):
+        removeFromQueue(msg.sender)
+        # TODO: aktualizuj gaz
+
+    # EMPTY - sytuacja niemożliwa
+    elif msg.tag == TAGS.EMPTY:
+        pass
+    # RESUME - sytuacja niemożliwa
+    elif msg.tag == TAGS.RESUME:
+        pass
+
+def onReceiveWait(msg: Message):
+    global AckNum
+    debug(f"Received: {msg}")
+    if (msg.tag == TAGS.REQ):
+        addToQueue(msg.sender,msg.clock, msg.data)
+        updateRoomGas()
+
+    # ACK - zwiększ licznik Ack o 1
+    elif (msg.tag == TAGS.ACK):
+        AckNum += 1
+        pass
+
+    # RELEASE - usuń nadawcę z kolejki, zaktualizuj RoomGas oraz InhaledGas
+    elif (msg.tag == TAGS.RELEASE):
+        removeFromQueue(msg.sender)
+        # TODO: aktualizuj gaz
+
+    # EMPTY - sytuacja niemożliwa
+    elif msg.tag == TAGS.EMPTY:
+        pass
+    # RESUME - sytuacja niemożliwa
+    elif msg.tag == TAGS.RESUME:
+        pass
+
+def onReceiveInsection(msg: Message):
+    debug(f"Received: {msg}")
+    if (msg.tag == TAGS.REQ):
+        addToQueue(msg.sender, msg.clock, msg.data)
+        updateRoomGas()
+
+    # ACK - sytuacja niemożliwa
+    elif (msg.tag == TAGS.ACK):
+        pass
+
+    # RELEASE - usuń nadawcę z kolejki, zaktualizuj RoomGas oraz InhaledGas
+    elif (msg.tag == TAGS.RELEASE):
+        removeFromQueue(msg.sender)
+        # TODO: aktualizuj gaz
+
+    # EMPTY - sytuacja niemożliwa
+    elif msg.tag == TAGS.EMPTY:
+        pass
+    # RESUME - sytuacja niemożliwa
+    elif msg.tag == TAGS.RESUME:
+        pass
+
 def main():
     global comm
 
@@ -171,13 +256,16 @@ def main():
         msg = receive()
 
         if CURRENT_STATE == STATES.REST:
-            pass
+            onReceiveWait(msg)
+            # TODO: losowanie czy wejść w WAIT, obsługa wymiany
 
         elif CURRENT_STATE == STATES.WAIT:
-            pass
+            onReceiveWait(msg)
+            # TODO: sprawdzanie warunków do wejścia na salę, obsługa wymiany
 
         elif CURRENT_STATE == STATES.INSECTION:
-            pass
+            onReceiveInsection(msg)
+            # TODO: losowanie czy wyjść, obsługa wymiany
 
         elif CURRENT_STATE == STATES.PAUSE:
             onReceivePause(msg)
