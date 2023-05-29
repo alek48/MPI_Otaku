@@ -199,6 +199,7 @@ def onReceiveRest(msg: Message):
     # EMPTY - sytuacja niemożliwa
     elif msg.tag == TAGS.EMPTY:
         pass
+
     # RESUME - sytuacja niemożliwa
     elif msg.tag == TAGS.RESUME:
         pass
@@ -213,7 +214,6 @@ def onReceiveWait(msg: Message):
     # ACK - zwiększ licznik Ack o 1
     elif (msg.tag == TAGS.ACK):
         AckNum += 1
-        pass
 
     # RELEASE - usuń nadawcę z kolejki, zaktualizuj RoomGas oraz InhaledGas
     elif (msg.tag == TAGS.RELEASE):
@@ -248,6 +248,41 @@ def onReceiveInsection(msg: Message):
     # RESUME - sytuacja niemożliwa
     elif msg.tag == TAGS.RESUME:
         pass
+
+def updateRoomGas():
+    global RoomGas
+
+    i = 0
+    RoomGas = 0
+
+    for process in WaitQueue:
+        RoomGas += process.gas
+
+        i += 1
+        if i > S:
+            break
+
+def updateInhaledGas(msg : Message):
+    global InhaledGas, LastResume, rank
+
+    # InhaledGas jest zwiększane o OwnGas procesu wysyłającego RELEASE pod warunkiem, że zegar Lamporta RELEASE jest większy
+    #  niż zegar Lamporta ostatniego otrzymanego RESUME (LastResume).
+    if msg.clock > LastResume:
+        InhaledGas += msg.data.gas
+
+    # Jeżeli przedstawiciel zemdleje (InhaledGas > X), to proces:
+    # Wysyła RELEASE jeśli jest INSECTION, następnie przechodzi do PAUSE, jeśli nie był nadawcą RELEASE.
+    if InhaledGas > X:
+       if CURRENT_STATE == STATES.INSECTION:
+           broadcast(TAGS.RELEASE, self=True) 
+
+           if rank == msg.sender:
+               changeState(STATES.REPLACING)
+           else:
+               changeState(STATES.PAUSE)
+    # Przechodzi do REPLACING, jeśli był nadawcą RELEASE.
+
+
 
 def main():
     global comm
