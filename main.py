@@ -1,6 +1,7 @@
 from typing import Any, List
 from mpi4py import MPI
 from enum import IntEnum
+from random import random
 import time
 
 class TERMCOLORS:
@@ -65,8 +66,10 @@ WaitQueue : List[QueueMember] = []
 LastResume : int = 0
 EmptyNum : int = 0
 AckNum: int = 0
+SelfGas: int = 0
 S: int = 1  # ilość stanowisk w sali
 X: int = 10  # ilość cuchów, po której trzeba wymienić reprezentanta
+M: int = 5  # maksymalne dozwolone stężenie cuchów na sali
 
 def addToQueue(rank, clock, gas):
     global WaitQueue
@@ -101,17 +104,6 @@ def receive() -> Message:
     msg : Message = comm.recv()
     clock += 1
     return msg
-
-def updateRoomGas():
-    global RoomGas, S
-    RoomGas = sum([x.gas for x in WaitQueue[:S]])
-    # potencjalny bug - co jeśli jestem w pierwszych S na liście, ale nie wszedłem do sali?
-
-def updateInhaledGas(LeaverGas):
-    global InhaledGas, X
-    InhaledGas += LeaverGas
-    if InhaledGas >= X:
-        pass  # TODO: uruchom procedurę wymiany reprezentanta
 
 def debug(msg):
     global clock, rank
@@ -184,8 +176,9 @@ def onReceiveRest(msg: Message):
 
     # REQ - dodaj nadawcę do kolejki i odeślj ACK
     if (msg.tag == TAGS.REQ):
-        addToQueue(msg.sender,msg.clock, msg.data)
+        addToQueue(msg.sender, msg.clock, msg.data)
         updateRoomGas()
+        send(TAGS.ACK, msg.sender)
 
     # ACK - sytuacja niemożliwa
     elif (msg.tag == TAGS.ACK):
@@ -210,6 +203,7 @@ def onReceiveWait(msg: Message):
     if (msg.tag == TAGS.REQ):
         addToQueue(msg.sender,msg.clock, msg.data)
         updateRoomGas()
+        send(TAGS.ACK, msg.sender)
 
     # ACK - zwiększ licznik Ack o 1
     elif (msg.tag == TAGS.ACK):
@@ -232,6 +226,7 @@ def onReceiveInsection(msg: Message):
     if (msg.tag == TAGS.REQ):
         addToQueue(msg.sender, msg.clock, msg.data)
         updateRoomGas()
+        send(TAGS.ACK, msg.sender)
 
     # ACK - sytuacja niemożliwa
     elif (msg.tag == TAGS.ACK):
@@ -285,22 +280,33 @@ def updateInhaledGas(msg : Message):
 
 
 def main():
-    global comm
+    global comm, SelfGas, rank, clock, AckNum, RoomGas
 
+    SelfGas = round(random()*100)
     while True:
         msg = receive()
 
         if CURRENT_STATE == STATES.REST:
             onReceiveWait(msg)
-            # TODO: losowanie czy wejść w WAIT, obsługa wymiany
+            if random() > 0.99:
+                broadcast(TAGS.REQ, SelfGas)
+                addToQueue(rank, clock, SelfGas)
+                changeState(STATES.WAIT)
+                AckNum = 0
 
         elif CURRENT_STATE == STATES.WAIT:
             onReceiveWait(msg)
-            # TODO: sprawdzanie warunków do wejścia na salę, obsługa wymiany
+            if (AckNum >= comm.Get_size() - 1) and (rank in [x.rank for x in WaitQueue[:S]]) and (
+                    RoomGas + SelfGas < M):
+                changeState(STATES.INSECTION)
 
         elif CURRENT_STATE == STATES.INSECTION:
             onReceiveInsection(msg)
-            # TODO: losowanie czy wyjść, obsługa wymiany
+            if random() > 0.99:
+                broadcast(TAGS.RELEASE, SelfGas)
+                removeFromQueue(rank)
+                updateInhaledGas(Message(TAGS.RELEASE, SelfGas))
+                changeState(STATES.REST)
 
         elif CURRENT_STATE == STATES.PAUSE:
             onReceivePause(msg)
