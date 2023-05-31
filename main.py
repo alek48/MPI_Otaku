@@ -74,8 +74,8 @@ EmptyNum : int = 0
 AckNum: int = 0
 SelfGas: int = 0
 S: int = 1  # ilość stanowisk w sali
-X: int = 10  # ilość cuchów, po której trzeba wymienić reprezentanta
-M: int = 5  # maksymalne dozwolone stężenie cuchów na sali
+X: int = 5  # ilość cuchów, po której trzeba wymienić reprezentanta
+M: int = 100  # maksymalne dozwolone stężenie cuchów na sali
 
 def addToQueue(rank, clock, gas):
     global WaitQueue
@@ -284,69 +284,81 @@ def joinQueue():
     changeState(STATES.WAIT)
     AckNum = 0
 
-
-def main():
+def ReceiveMessage():
     global comm, SelfGas, rank, clock, AckNum, RoomGas
 
-    # Initialize
-    SelfGas = round(random() * 100)
-    time.sleep(random() * 10)
+    msg = receive()
+    debug(f"Received {msg}")
 
-    if (random() > 0.667):
-        joinQueue()
+    if CURRENT_STATE == STATES.REST:
+        onReceiveWait(msg)
+        if random() > 0.667:
+            joinQueue()
+
+    elif CURRENT_STATE == STATES.WAIT:
+        onReceiveWait(msg)
+        if (AckNum >= comm.Get_size() - 1):
+            if (rank in [x.rank for x in WaitQueue[:S]]):
+                if (RoomGas + SelfGas < M):
+                    changeState(STATES.INSECTION)
+                    debug("I'm entering the room")
+                else:
+                    debug(f"Can't join - RG={RoomGas} SG={SelfGas} M={M}")
+            else:
+                wqs = ""
+                for x in WaitQueue[:S]:
+                    wqs += x.__str__()
+                    wqs += ", "
+                debug(f"Can't join - Rank, my rank={rank} wq={wqs}")
+        else:
+            debug(f"Can't join - AckNum={AckNum} < {comm.Get_size() - 1}")
+        # if (AckNum >= comm.Get_size() - 1) and (rank in [x.rank for x in WaitQueue[:S]]) and (
+        #         RoomGas + SelfGas < M):
+            # changeState(STATES.INSECTION)
+            # debug("I'm entering the room")
+
+    elif CURRENT_STATE == STATES.INSECTION:
+        onReceiveInsection(msg)
+        
+
+    elif CURRENT_STATE == STATES.PAUSE:
+        onReceivePause(msg)
+
+    elif CURRENT_STATE == STATES.REPLACING:
+        onReceiveReplacing(msg)
+
+        # Proces i przebywa w stanie REPLACING dopóki nie otrzyma EMPTY od wszystkich innych procesów, 
+        # wtedy rozsyła on RESUME do wszystkich procesów, wliczając siebie.
+        if EmptyNum + 1 == comm.Get_size():
+            broadcast(TAGS.RESUME, self=True)
+
+    else:
+        debug("Invalid state")
+
+
+def main():
+    global SelfGas, comm
+
+    SelfGas = round(random() * 100)
+    time.sleep(random() * 3)
 
     while True:
-        msg = receive()
-        debug(f"Received {msg}")
+        received = comm.Iprobe()
 
-        if CURRENT_STATE == STATES.REST:
-            onReceiveWait(msg)
-            if random() > 0.667:
-                joinQueue()
-
-        elif CURRENT_STATE == STATES.WAIT:
-            onReceiveWait(msg)
-            if (AckNum >= comm.Get_size() - 1):
-                if (rank in [x.rank for x in WaitQueue[:S]]):
-                    if (RoomGas + SelfGas < M):
-                        changeState(STATES.INSECTION)
-                        debug("I'm entering the room")
-                    else:
-                        debug(f"Can't join - RG={RoomGas} SG={SelfGas} M={M}")
-                else:
-                    wqs = ""
-                    for x in WaitQueue[:S]:
-                        wqs += x.__str__()
-                        wqs += ", "
-                    debug(f"Can't join - Rank, my rank={rank} wq={wqs}")
-            else:
-                debug(f"Can't join - AckNum={AckNum} < {comm.Get_size() - 1}")
-            # if (AckNum >= comm.Get_size() - 1) and (rank in [x.rank for x in WaitQueue[:S]]) and (
-            #         RoomGas + SelfGas < M):
-                # changeState(STATES.INSECTION)
-                # debug("I'm entering the room")
-
-        elif CURRENT_STATE == STATES.INSECTION:
-            onReceiveInsection(msg)
-            time.sleep(4)
-            broadcast(TAGS.RELEASE, SelfGas)
-            removeFromQueue(rank)
-            updateInhaledGas(Message(TAGS.RELEASE, SelfGas))
-            changeState(STATES.REST)
-            debug("I'm back")
-
-        elif CURRENT_STATE == STATES.PAUSE:
-            onReceivePause(msg)
-
-        elif CURRENT_STATE == STATES.REPLACING:
-            onReceiveReplacing(msg)
-
-            # Proces i przebywa w stanie REPLACING dopóki nie otrzyma EMPTY od wszystkich innych procesów, 
-            # wtedy rozsyła on RESUME do wszystkich procesów, wliczając siebie.
-            if EmptyNum + 1 == comm.Get_size():
-                broadcast(TAGS.RESUME, self=True)
-
+        if received:
+            ReceiveMessage()
         else:
-            debug("Invalid state")
+            # do stuff while waiting for message
+            if CURRENT_STATE == STATES.REST:
+                time.sleep(4)
+                joinQueue()
+            elif CURRENT_STATE == STATES.INSECTION:
+                time.sleep(random() * 10)
+                broadcast(TAGS.RELEASE, SelfGas)
+                removeFromQueue(rank)
+                updateInhaledGas(Message(TAGS.RELEASE, SelfGas))
+                changeState(STATES.REST)
+                debug("I'm back")
+
 
 main()
