@@ -26,6 +26,12 @@ class TAGS(IntEnum):
     EMPTY = 4
     RESUME = 5
 
+def GetTag(num):
+    for key, member in TAGS.__members__.items():
+        if member.value == num:
+            return key
+    raise ValueError("Value not found in enum")
+
 clock : int = 0
 
 comm = MPI.COMM_WORLD
@@ -113,8 +119,6 @@ def debug(msg):
 def onReceivePause(msg : Message):
     global RoomGas, InhaledGas, LastResume, EmptyNum
 
-    debug(f"Received: {msg}")
-
     # REQ - Przechowuje wiadomość, żeby obsłużyć ją po opuszczeniu tego stanu (opisane poniżej).
     if (msg.tag == TAGS.REQ):
         messageFreezer.append(msg)
@@ -146,7 +150,6 @@ def onReceivePause(msg : Message):
 def onReceiveReplacing(msg : Message):
     global RoomGas, InhaledGas, LastResume, EmptyNum
 
-    debug(f"Received: {msg}")
     # REQ - Przechowuje wiadomość, żeby obsłużyć ją po opuszczeniu tego stanu.
     if (msg.tag == TAGS.REQ):
         messageFreezer.append(msg)
@@ -172,8 +175,6 @@ def onReceiveReplacing(msg : Message):
 
 
 def onReceiveRest(msg: Message):
-    debug(f"Received: {msg}")
-
     # REQ - dodaj nadawcę do kolejki i odeślj ACK
     if (msg.tag == TAGS.REQ):
         addToQueue(msg.sender, msg.clock, msg.data)
@@ -199,7 +200,6 @@ def onReceiveRest(msg: Message):
 
 def onReceiveWait(msg: Message):
     global AckNum
-    debug(f"Received: {msg}")
     if (msg.tag == TAGS.REQ):
         addToQueue(msg.sender,msg.clock, msg.data)
         updateRoomGas()
@@ -222,7 +222,6 @@ def onReceiveWait(msg: Message):
         pass
 
 def onReceiveInsection(msg: Message):
-    debug(f"Received: {msg}")
     if (msg.tag == TAGS.REQ):
         addToQueue(msg.sender, msg.clock, msg.data)
         updateRoomGas()
@@ -297,6 +296,7 @@ def main():
 
     while True:
         msg = receive()
+        debug(f"Received {GetTag(msg.tag)} {'(' + msg.data + ')' if msg.data is not None else ''} from {msg.sender} cl={msg.clock}")
 
         if CURRENT_STATE == STATES.REST:
             onReceiveWait(msg)
