@@ -52,7 +52,7 @@ class QueueMember:
         return f"Member=(rank={self.rank} clock={self.clock} gas={self.gas})"
 
 PREVIOUS_STATE = STATES.REST
-CURRENT_STATE = STATES.PAUSE
+CURRENT_STATE = STATES.REST
 
 def changeState(newState):
     global PREVIOUS_STATE, CURRENT_STATE
@@ -111,7 +111,7 @@ def debug(msg):
 
 
 def onReceivePause(msg : Message):
-    global RoomGas, InhaledGas, LastResume
+    global RoomGas, InhaledGas, LastResume, EmptyNum
 
     debug(f"Received: {msg}")
 
@@ -144,7 +144,7 @@ def onReceivePause(msg : Message):
         InhaledGas = 0
 
 def onReceiveReplacing(msg : Message):
-    global RoomGas, InhaledGas, LastResume
+    global RoomGas, InhaledGas, LastResume, EmptyNum
 
     debug(f"Received: {msg}")
     # REQ - Przechowuje wiadomość, żeby obsłużyć ją po opuszczeniu tego stanu.
