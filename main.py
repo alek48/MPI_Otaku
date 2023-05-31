@@ -246,15 +246,10 @@ def onReceiveInsection(msg: Message):
 def updateRoomGas():
     global RoomGas
 
-    i = 0
     RoomGas = 0
 
-    for process in WaitQueue:
+    for process in WaitQueue[:S]:
         RoomGas += process.gas
-
-        i += 1
-        if i > S:
-            break
 
 def updateInhaledGas(msg : Message):
     global InhaledGas, LastResume, rank
