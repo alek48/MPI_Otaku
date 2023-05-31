@@ -277,22 +277,31 @@ def updateInhaledGas(msg : Message):
                changeState(STATES.PAUSE)
     # Przechodzi do REPLACING, jeśli był nadawcą RELEASE.
 
+def joinQueue():
+    global comm, rank, clock, SelfGas, AckNum
+    broadcast(TAGS.REQ, SelfGas)
+    addToQueue(rank, clock, SelfGas)
+    changeState(STATES.WAIT)
+    AckNum = 0
 
 
 def main():
     global comm, SelfGas, rank, clock, AckNum, RoomGas
 
-    SelfGas = round(random()*100)
+    # Initialize
+    SelfGas = round(random() * 100)
+    time.sleep(random() * 10)
+
+    if (random() > 0.667):
+        joinQueue()
+
     while True:
         msg = receive()
 
         if CURRENT_STATE == STATES.REST:
             onReceiveWait(msg)
-            if random() > 0.99:
-                broadcast(TAGS.REQ, SelfGas)
-                addToQueue(rank, clock, SelfGas)
-                changeState(STATES.WAIT)
-                AckNum = 0
+            if random() > 0.667:
+                joinQueue()
 
         elif CURRENT_STATE == STATES.WAIT:
             onReceiveWait(msg)
@@ -322,9 +331,4 @@ def main():
         else:
             debug("Invalid state")
 
-        time.sleep(2)
-
-if rank == 0:
-    broadcast(TAGS.ACK, "Test msg")
-else:
-    main()
+main()
