@@ -314,7 +314,11 @@ def main():
                     else:
                         debug(f"Can't join - RG={RoomGas} SG={SelfGas} M={M}")
                 else:
-                    debug(f"Can't join - Rank, my rank={rank} wq={WaitQueue[:S]}")
+                    wqs = ""
+                    for x in WaitQueue[:S]:
+                        wqs += x.__str__()
+                        wqs += ", "
+                    debug(f"Can't join - Rank, my rank={rank} wq={wqs}")
             else:
                 debug(f"Can't join - AckNum={AckNum} < {comm.Get_size() - 1}")
             # if (AckNum >= comm.Get_size() - 1) and (rank in [x.rank for x in WaitQueue[:S]]) and (
