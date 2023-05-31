@@ -296,7 +296,7 @@ def main():
 
     while True:
         msg = receive()
-        debug(f"Received {GetTag(msg.tag)} {'(' + msg.data + ')' if msg.data is not None else ''} from {msg.sender} cl={msg.clock}")
+        debug(f"Received {GetTag(msg.tag)} {'(' + str(msg.data) + ')' if msg.data is not None else ''} from {msg.sender} cl={msg.clock}")
 
         if CURRENT_STATE == STATES.REST:
             onReceiveWait(msg)
