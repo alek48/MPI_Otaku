@@ -80,7 +80,7 @@ M: int = 100  # maksymalne dozwolone stężenie cuchów na sali
 def addToQueue(rank, clock, gas):
     global WaitQueue
     WaitQueue.append( QueueMember(rank, clock, gas) )
-    WaitQueue = sorted(WaitQueue, key=lambda x : x.clock)
+    WaitQueue = sorted(WaitQueue, key=lambda x : (x.clock, x.rank))
     # sortowane po zegarze, bo w takiej kolejności wpuszczamy do sali
 
 def removeFromQueue(rank):
@@ -279,8 +279,8 @@ def updateInhaledGas(msg : Message):
 def joinQueue():
     global comm, rank, clock, SelfGas, AckNum
     debug("I'm sitting in queue")
-    broadcast(TAGS.REQ, SelfGas)
     addToQueue(rank, clock, SelfGas)
+    broadcast(TAGS.REQ, SelfGas)
     changeState(STATES.WAIT)
     AckNum = 0
 
@@ -306,7 +306,7 @@ def ReceiveMessage():
                     debug(f"Can't join - RG={RoomGas} SG={SelfGas} M={M}")
             else:
                 wqs = ""
-                for x in WaitQueue[:S]:
+                for x in WaitQueue:
                     wqs += x.__str__()
                     wqs += ", "
                 debug(f"Can't join - Rank, my rank={rank} wq={wqs}")
