@@ -319,8 +319,8 @@ def main():
                 debug("Can't join - AckNum")
             # if (AckNum >= comm.Get_size() - 1) and (rank in [x.rank for x in WaitQueue[:S]]) and (
             #         RoomGas + SelfGas < M):
-                changeState(STATES.INSECTION)
-                debug("I'm entering the room")
+                # changeState(STATES.INSECTION)
+                # debug("I'm entering the room")
 
         elif CURRENT_STATE == STATES.INSECTION:
             onReceiveInsection(msg)
