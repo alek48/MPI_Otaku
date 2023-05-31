@@ -306,8 +306,19 @@ def main():
 
         elif CURRENT_STATE == STATES.WAIT:
             onReceiveWait(msg)
-            if (AckNum >= comm.Get_size() - 1) and (rank in [x.rank for x in WaitQueue[:S]]) and (
-                    RoomGas + SelfGas < M):
+            if (AckNum >= comm.Get_size() - 1):
+                if (rank in [x.rank for x in WaitQueue[:S]]):
+                    if (RoomGas + SelfGas < M):
+                        changeState(STATES.INSECTION)
+                        debug("I'm entering the room")
+                    else:
+                        debug("Can't join - Gas")
+                else:
+                    debug("Can't join - Rank")
+            else:
+                debug("Can't join - AckNum")
+            # if (AckNum >= comm.Get_size() - 1) and (rank in [x.rank for x in WaitQueue[:S]]) and (
+            #         RoomGas + SelfGas < M):
                 changeState(STATES.INSECTION)
                 debug("I'm entering the room")
 
