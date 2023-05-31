@@ -312,11 +312,11 @@ def main():
                         changeState(STATES.INSECTION)
                         debug("I'm entering the room")
                     else:
-                        debug("Can't join - Gas")
+                        debug(f"Can't join - RG={RoomGas} SG={SelfGas} M={M}")
                 else:
-                    debug("Can't join - Rank")
+                    debug(f"Can't join - Rank, my rank={rank} wq={WaitQueue[:S]}")
             else:
-                debug("Can't join - AckNum")
+                debug(f"Can't join - AckNum={AckNum} < {comm.Get_size() - 1}")
             # if (AckNum >= comm.Get_size() - 1) and (rank in [x.rank for x in WaitQueue[:S]]) and (
             #         RoomGas + SelfGas < M):
                 # changeState(STATES.INSECTION)
