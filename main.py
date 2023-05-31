@@ -46,7 +46,7 @@ class Message:
         self.sender : int = rank
 
     def __str__(self):
-        return f"Message=(tag={self.tag}, data={self.data} clock={self.clock} sender={self.sender})"
+        return f"Message=(tag={GetTag(self.tag)}, data={self.data} clock={self.clock} sender={self.sender})"
 
 class QueueMember:
     def __init__(self, rank : int, clock : int, gas : int):
@@ -262,7 +262,7 @@ def updateInhaledGas(msg : Message):
     # InhaledGas jest zwiększane o OwnGas procesu wysyłającego RELEASE pod warunkiem, że zegar Lamporta RELEASE jest większy
     #  niż zegar Lamporta ostatniego otrzymanego RESUME (LastResume).
     if msg.clock > LastResume:
-        InhaledGas += msg.data.gas
+        InhaledGas += msg.data
 
     # Jeżeli przedstawiciel zemdleje (InhaledGas > X), to proces:
     # Wysyła RELEASE jeśli jest INSECTION, następnie przechodzi do PAUSE, jeśli nie był nadawcą RELEASE.
@@ -297,7 +297,7 @@ def main():
 
     while True:
         msg = receive()
-        debug(f"Received {GetTag(msg.tag)} {'(' + str(msg.data) + ')' if msg.data is not None else ''} from {msg.sender} cl={msg.clock}")
+        debug(f"Received {msg}")
 
         if CURRENT_STATE == STATES.REST:
             onReceiveWait(msg)
