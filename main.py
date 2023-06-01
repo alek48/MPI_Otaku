@@ -134,8 +134,11 @@ def onReceivePause(msg : Message):
         removeFromQueue(msg.sender)
         updateRoomGas()
         updateInhaledGas(msg)
+        ''' failed fix
         if msg.clock < LastResume:
+            debug(f'bonus blame {msg.sender}')
             send(TAGS.EMPTY, msg.sender) # TODO
+        '''
 
     # EMPTY - Ignoruje; sytuacja niemożliwa.
     elif (msg.tag == TAGS.EMPTY):
@@ -168,6 +171,12 @@ def onReceiveReplacing(msg : Message):
         removeFromQueue(msg.sender)
         updateRoomGas()
         updateInhaledGas(msg)
+        ''' failed fix
+        if msg.clock < LastResume:
+            debug(f'redirect blame {msg.sender}')
+            send(TAGS.EMPTY, msg.sender)
+        '''
+
     
     # EMPTY - Zwiększa EmptyNum o 1.
     elif (msg.tag == TAGS.EMPTY):
