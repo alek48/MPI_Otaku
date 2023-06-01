@@ -284,7 +284,7 @@ def updateInhaledGas(msg : Message):
             info("Wymieniam przedstawiciela")
             return
         changeState(STATES.PAUSE)
-        info(f'Przedstawiciel umarł przez [{msg.sender}] i pauzuje działanie i wychodze z sali')
+        info(f'Przedstawiciel umarł przez [{msg.sender}]. Pauzuje działanie i wychodze z sali')
         send(TAGS.EMPTY, 0)
 
 
@@ -339,7 +339,7 @@ def ReceiveMessage():
             LastResume = msg.clock
             InhaledGas = 0
             broadcast(TAGS.RESUME)
-            info('Wymieniłem reprezentanta')
+            info('Wymieniłem reprezentanta. Wracam z pauzy')
             changeState(PREVIOUS_STATE)
 
     else:
