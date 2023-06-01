@@ -1,95 +1,49 @@
-6|8|I'm sitting in queue
-6|63|I'm entering the room
-6|64|I'm back
-6|66|I'm sitting in queue
-6|130|paused and out of room
-6|183|resuming
-6|214|paused and out of room
-6|287|resuming
-6|288|I'm entering the room
-6|294|I'm back
-6|303|I'm sitting in queue
-6|356|paused and out of room
-6|413|resuming
-6|439|paused and out of room
-6|510|resuming
-6|510|I'm entering the room
-6|528|I'm back
-6|560|I'm sitting in queue
-6|603|paused and out of room
-6|620|resuming
-6|650|paused and out of room
-6|718|resuming
-6|738|I'm entering the room
-6|739|I'm back
-6|758|I'm sitting in queue
-6|850|paused and out of room
-6|863|resuming
-6|889|paused and out of room
-6|953|resuming
-6|978|I'm entering the room
-6|989|I'm back
-6|992|I'm sitting in queue
-6|1082|paused and out of room
-6|1105|resuming
-6|1137|paused and out of room
-6|1216|resuming
-6|1227|I'm entering the room
-6|1232|I'm back
-6|1251|I'm sitting in queue
-6|1316|paused and out of room
-6|1336|resuming
-6|1363|paused and out of room
-6|1424|resuming
-6|1447|I'm entering the room
-6|1450|I'm back
-6|1457|I'm sitting in queue
-6|1525|paused and out of room
-6|1533|resuming
-6|1572|paused and out of room
-6|1664|resuming
-6|1694|I'm entering the room
-6|1695|I'm back
-6|1701|I'm sitting in queue
-6|1774|paused and out of room
-6|1788|resuming
-6|1822|paused and out of room
-6|1923|resuming
-6|1948|I'm entering the room
-6|1951|I'm back
-6|1957|I'm sitting in queue
-6|2021|paused and out of room
-6|2052|resuming
-6|2099|paused and out of room
-6|2180|resuming
-6|2185|I'm entering the room
-6|2188|I'm back
-6|2193|I'm sitting in queue
-6|2247|paused and out of room
-6|2298|resuming
-6|2378|paused and out of room
-6|2379|I'm entering the room
-6|2380|I'm back
-6|2381|I'm sitting in queue
-6|2459|paused and out of room
-6|2540|resuming
-6|2558|I'm entering the room
-6|2561|I'm back
-6|2576|I'm sitting in queue
-6|2633|paused and out of room
-6|2657|resuming
-6|2698|paused and out of room
-6|2765|resuming
-6|2776|I'm entering the room
-6|2779|I'm back
-6|2814|I'm sitting in queue
-6|2873|paused and out of room
-6|2884|resuming
-6|2918|paused and out of room
-6|2980|resuming
-6|2993|I'm entering the room
-6|2998|I'm back
-6|2998|I'm sitting in queue
-6|3065|paused and out of room
-6|3099|resuming
-6|3135|paused and out of room
+6|0|I'm sitting in queue
+6|70|I'm entering the room
+6|79|I'm back
+6|79|I'm sitting in queue
+6|143|paused and out of room
+6|174|resuming
+6|239|paused and out of room
+6|288|resuming
+6|289|I'm entering the room
+6|293|I'm back
+6|293|I'm sitting in queue
+6|357|paused and out of room
+6|385|resuming
+6|432|I'm entering the room
+6|466|paused and out of room
+6|496|resuming
+6|519|I'm sitting in queue
+6|606|paused and out of room
+6|664|resuming
+6|757|I'm entering the room
+6|766|paused and out of room
+6|848|resuming
+6|870|paused and out of room
+6|902|resuming
+6|941|I'm sitting in queue
+6|1010|paused and out of room
+6|1059|resuming
+6|1092|paused and out of room
+6|1124|resuming
+6|1145|I'm entering the room
+6|1152|I'm back
+6|1152|I'm sitting in queue
+6|1225|paused and out of room
+6|1262|resuming
+6|1333|paused and out of room
+6|1378|resuming
+6|1378|I'm entering the room
+6|1396|I'm back
+6|1412|I'm sitting in queue
+6|1497|paused and out of room
+6|1541|resuming
+6|1591|paused and out of room
+6|1662|resuming
+6|1663|I'm entering the room
+6|1701|I'm back
+6|1702|I'm sitting in queue
+6|1767|paused and out of room
+6|1784|resuming
+6|1860|paused and out of room

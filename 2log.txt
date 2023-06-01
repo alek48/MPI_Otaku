@@ -1,99 +1,53 @@
-2|2|I'm sitting in queue
-2|42|I'm entering the room
-2|43|I'm back
-2|52|I'm sitting in queue
-2|113|paused and out of room
-2|183|resuming
-2|210|I'm entering the room
-2|211|I'm back
-2|215|paused and out of room
-2|287|resuming
-2|289|I'm sitting in queue
-2|337|paused and out of room
-2|413|resuming
-2|433|I'm entering the room
-2|440|I'm back
-2|441|paused and out of room
-2|510|resuming
-2|511|I'm sitting in queue
-2|565|paused and out of room
-2|620|resuming
-2|641|I'm entering the room
-2|644|I'm back
-2|647|I'm sitting in queue
-2|707|paused and out of room
-2|718|resuming
-2|763|paused and out of room
-2|863|resuming
-2|875|I'm entering the room
-2|882|I'm back
-2|889|paused and out of room
-2|953|resuming
-2|957|I'm sitting in queue
-2|1016|paused and out of room
-2|1105|resuming
-2|1128|I'm entering the room
-2|1129|I'm back
-2|1134|I'm sitting in queue
-2|1201|paused and out of room
-2|1216|resuming
-2|1253|paused and out of room
-2|1336|resuming
-2|1351|I'm entering the room
-2|1352|I'm back
-2|1362|paused and out of room
-2|1424|resuming
-2|1426|I'm sitting in queue
-2|1472|paused and out of room
-2|1533|resuming
-2|1563|I'm entering the room
-2|1569|I'm back
-2|1570|paused and out of room
-2|1664|resuming
-2|1668|I'm sitting in queue
-2|1717|paused and out of room
-2|1788|resuming
-2|1810|I'm entering the room
-2|1815|I'm back
-2|1815|I'm sitting in queue
-2|1902|paused and out of room
-2|1923|resuming
-2|1966|paused and out of room
-2|2052|resuming
-2|2062|I'm entering the room
-2|2065|I'm back
-2|2075|I'm sitting in queue
-2|2156|paused and out of room
-2|2180|resuming
-2|2220|paused and out of room
-2|2298|resuming
-2|2311|I'm entering the room
-2|2314|I'm back
-2|2314|I'm sitting in queue
-2|2378|paused and out of room
-2|2421|resuming
-2|2452|I'm entering the room
-2|2453|I'm back
-2|2454|paused and out of room
-2|2540|resuming
-2|2542|I'm sitting in queue
-2|2594|paused and out of room
-2|2657|resuming
-2|2684|I'm entering the room
-2|2687|I'm back
-2|2698|paused and out of room
-2|2765|resuming
-2|2766|I'm sitting in queue
-2|2817|paused and out of room
-2|2884|resuming
-2|2905|I'm entering the room
-2|2908|I'm back
-2|2914|I'm sitting in queue
-2|2967|paused and out of room
-2|2980|resuming
-2|3025|paused and out of room
-2|3099|resuming
-2|3112|I'm entering the room
-2|3120|I'm back
-2|3123|I'm sitting in queue
-2|3191|paused and out of room
+2|0|I'm sitting in queue
+2|60|I'm entering the room
+2|62|I'm back
+2|62|I'm sitting in queue
+2|142|paused and out of room
+2|174|resuming
+2|214|paused and out of room
+2|215|I'm entering the room
+2|216|I'm back
+2|216|I'm sitting in queue
+2|314|paused and out of room
+2|378|resuming
+2|438|I'm entering the room
+2|458|I'm back
+2|458|I'm sitting in queue
+2|480|paused and out of room
+2|496|resuming
+2|594|paused and out of room
+2|663|resuming
+2|665|I'm entering the room
+2|696|I'm back
+2|696|I'm sitting in queue
+2|780|paused and out of room
+2|826|resuming
+2|869|I'm entering the room
+2|873|paused and out of room
+2|902|resuming
+2|905|I'm sitting in queue
+2|1013|paused and out of room
+2|1041|resuming
+2|1058|I'm entering the room
+2|1091|paused and out of room
+2|1124|resuming
+2|1128|I'm sitting in queue
+2|1220|paused and out of room
+2|1266|resuming
+2|1282|I'm entering the room
+2|1330|paused and out of room
+2|1416|resuming
+2|1440|I'm sitting in queue
+2|1502|paused and out of room
+2|1528|resuming
+2|1586|paused and out of room
+2|1660|resuming
+2|1663|I'm entering the room
+2|1699|I'm back
+2|1699|I'm sitting in queue
+2|1743|paused and out of room
+2|1784|resuming
+2|1886|paused and out of room
+2|1887|I'm entering the room
+2|1894|I'm back
+2|1894|I'm sitting in queue

@@ -2,6 +2,7 @@ from typing import Any, List
 from mpi4py import MPI
 from enum import IntEnum
 from random import random
+from time import sleep
 
 DEBUG_TO_FILE = True
 
@@ -74,6 +75,7 @@ LastResume : int = 0
 EmptyNum : int = 0
 AckNum: int = 0
 SelfGas: int = 1
+r: int = 0
 S: int = 3  # ilość stanowisk w sali
 X: int = 30  # ilość cuchów, po której trzeba wymienić reprezentanta
 M: int = 20  # maksymalne dozwolone stężenie cuchów na sali
@@ -274,7 +276,7 @@ def updateInhaledGas(msg : Message):
             changeState(STATES.REST)
             broadcast(TAGS.RELEASE, SelfGas)
             removeFromQueue(rank)
-        if rank == 0:
+        if rank == r:
             changeState(STATES.REPLACING)
             debug("replacing")
             return
@@ -350,6 +352,7 @@ def main():
     if DEBUG_TO_FILE:
         with open(f'{rank}log.txt', 'w') as f:
             f.write('')
+
     SelfGas = max(1, round(random() * 10))
 
     while True:
@@ -359,10 +362,12 @@ def main():
             ReceiveMessage()
         else:
             # do stuff while waiting for message
-            if CURRENT_STATE == STATES.REST and (not (rank in (x.rank for x in WaitQueue))) and random()>0.999:
+            if CURRENT_STATE == STATES.REST and (not (rank in (x.rank for x in WaitQueue))) and random()>0.5:
+                sleep(2*random())
                 joinQueue()
 
-            elif CURRENT_STATE == STATES.INSECTION and random() > 0.9995:
+            elif CURRENT_STATE == STATES.INSECTION and random() > 0.5:
+                sleep(2*random())
                 changeState(STATES.REST)
                 broadcast(TAGS.RELEASE, SelfGas, self=True)
                 debug("I'm back")
