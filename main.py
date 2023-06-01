@@ -339,8 +339,8 @@ def ReceiveMessage():
             EmptyNum = 0
             LastResume = msg.clock
             InhaledGas = 0
-            broadcast(TAGS.RESUME)
             info('Wymieniłem reprezentanta. Wracam z pauzy')
+            broadcast(TAGS.RESUME)
             changeState(PREVIOUS_STATE)
 
     else:
