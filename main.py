@@ -72,10 +72,10 @@ WaitQueue : List[QueueMember] = []
 LastResume : int = 0
 EmptyNum : int = 0
 AckNum: int = 0
-SelfGas: int = 0
-S: int = 1  # ilość stanowisk w sali
-X: int = 5  # ilość cuchów, po której trzeba wymienić reprezentanta
-M: int = 100  # maksymalne dozwolone stężenie cuchów na sali
+SelfGas: int = 1
+S: int = 3  # ilość stanowisk w sali
+X: int = 30  # ilość cuchów, po której trzeba wymienić reprezentanta
+M: int = 20  # maksymalne dozwolone stężenie cuchów na sali
 
 def addToQueue(rank, clock, gas):
     global WaitQueue
@@ -108,12 +108,12 @@ def broadcast(tag, data=None, self=False):
 def receive() -> Message:
     global clock, status
     msg : Message = comm.recv()
-    clock += 1
+    clock = max(clock+1, msg.clock)
     return msg
 
 def debug(msg):
     global clock, rank
-    print(f"{COLORS[rank % 3]}[{rank}][{clock}] {msg}")
+    print(f"{COLORS[rank % 3]}[{rank}][{clock}] {msg}", flush=True)
 
 
 def onReceivePause(msg : Message):
@@ -188,7 +188,8 @@ def onReceiveRest(msg: Message):
     # RELEASE - usuń nadawcę z kolejki, zaktualizuj RoomGas oraz InhaledGas
     elif (msg.tag == TAGS.RELEASE):
         removeFromQueue(msg.sender)
-        # TODO: aktualizuj gaz
+        updateRoomGas()
+        updateInhaledGas(msg)
 
     # EMPTY - sytuacja niemożliwa
     elif msg.tag == TAGS.EMPTY:
@@ -201,7 +202,7 @@ def onReceiveRest(msg: Message):
 def onReceiveWait(msg: Message):
     global AckNum
     if (msg.tag == TAGS.REQ):
-        addToQueue(msg.sender,msg.clock, msg.data)
+        addToQueue(msg.sender, msg.clock, msg.data)
         updateRoomGas()
         send(TAGS.ACK, msg.sender)
 
@@ -212,7 +213,8 @@ def onReceiveWait(msg: Message):
     # RELEASE - usuń nadawcę z kolejki, zaktualizuj RoomGas oraz InhaledGas
     elif (msg.tag == TAGS.RELEASE):
         removeFromQueue(msg.sender)
-        # TODO: aktualizuj gaz
+        updateRoomGas()
+        updateInhaledGas(msg)
 
     # EMPTY - sytuacja niemożliwa
     elif msg.tag == TAGS.EMPTY:
@@ -234,7 +236,8 @@ def onReceiveInsection(msg: Message):
     # RELEASE - usuń nadawcę z kolejki, zaktualizuj RoomGas oraz InhaledGas
     elif (msg.tag == TAGS.RELEASE):
         removeFromQueue(msg.sender)
-        # TODO: aktualizuj gaz
+        updateRoomGas()
+        updateInhaledGas(msg)
 
     # EMPTY - sytuacja niemożliwa
     elif msg.tag == TAGS.EMPTY:
@@ -247,28 +250,31 @@ def updateRoomGas():
     global RoomGas
 
     RoomGas = 0
-
+    i = 0
     for process in WaitQueue[:S]:
+        if RoomGas + process.gas > M:
+            break
         RoomGas += process.gas
+        i += 1
+    return i
 
 def updateInhaledGas(msg : Message):
     global InhaledGas, LastResume, rank
-
     # InhaledGas jest zwiększane o OwnGas procesu wysyłającego RELEASE pod warunkiem, że zegar Lamporta RELEASE jest większy
     #  niż zegar Lamporta ostatniego otrzymanego RESUME (LastResume).
     if msg.clock > LastResume:
         InhaledGas += msg.data
-
+    debug(f'InhaledGas: {InhaledGas}')
     # Jeżeli przedstawiciel zemdleje (InhaledGas > X), to proces:
     # Wysyła RELEASE jeśli jest INSECTION, następnie przechodzi do PAUSE, jeśli nie był nadawcą RELEASE.
     if InhaledGas > X:
-       if CURRENT_STATE == STATES.INSECTION:
-           broadcast(TAGS.RELEASE, self=True) 
-
-           if rank == msg.sender:
-               changeState(STATES.REPLACING)
-           else:
-               changeState(STATES.PAUSE)
+        if CURRENT_STATE == STATES.INSECTION:
+            if rank == msg.sender:
+                changeState(STATES.REPLACING)
+                debug("replacing")
+            else:
+                changeState(STATES.PAUSE)
+                debug("pausing")
     # Przechodzi do REPLACING, jeśli był nadawcą RELEASE.
 
 def joinQueue():
@@ -280,10 +286,13 @@ def joinQueue():
     AckNum = 0
 
 def ReceiveMessage():
-    global comm, SelfGas, rank, clock, AckNum, RoomGas
+    global comm, SelfGas, rank, clock, AckNum, RoomGas, messageFreezer
 
-    msg = receive()
-    debug(f"Received {msg}")
+    if CURRENT_STATE in (STATES.REST, STATES.INSECTION, STATES.WAIT) and len(messageFreezer):
+        msg = messageFreezer.pop(0)
+    else:
+        msg = receive()
+    # debug(f"Received {msg}")
 
     if CURRENT_STATE == STATES.REST:
         onReceiveWait(msg)
@@ -293,7 +302,8 @@ def ReceiveMessage():
     elif CURRENT_STATE == STATES.WAIT:
         onReceiveWait(msg)
         if (AckNum >= comm.Get_size() - 1):
-            if (rank in [x.rank for x in WaitQueue[:S]]):
+            amountInRoom = updateRoomGas()
+            if (rank in [x.rank for x in WaitQueue[:amountInRoom]]):
                 if (RoomGas + SelfGas < M):
                     changeState(STATES.INSECTION)
                     debug("I'm entering the room")
@@ -306,7 +316,8 @@ def ReceiveMessage():
                     wqs += ", "
                 debug(f"Can't join - Rank, my rank={rank} wq={wqs}")
         else:
-            debug(f"Can't join - AckNum={AckNum} < {comm.Get_size() - 1}")
+            pass
+            # debug(f"Can't join - AckNum={AckNum} < {comm.Get_size() - 1}")
         # if (AckNum >= comm.Get_size() - 1) and (rank in [x.rank for x in WaitQueue[:S]]) and (
         #         RoomGas + SelfGas < M):
             # changeState(STATES.INSECTION)
@@ -334,7 +345,7 @@ def ReceiveMessage():
 def main():
     global SelfGas, comm
 
-    SelfGas = round(random() * 100)
+    SelfGas = max(1, round(random() * 10))
     time.sleep(random() * 3)
 
     while True:
@@ -348,12 +359,14 @@ def main():
                 time.sleep(4)
                 joinQueue()
             elif CURRENT_STATE == STATES.INSECTION:
-                time.sleep(random() * 10)
+                time.sleep(random() * 5)
                 broadcast(TAGS.RELEASE, SelfGas)
                 removeFromQueue(rank)
+                updateRoomGas()
                 updateInhaledGas(Message(TAGS.RELEASE, SelfGas))
-                changeState(STATES.REST)
-                debug("I'm back")
+                if CURRENT_STATE == STATES.INSECTION:
+                    changeState(STATES.REST)
+                    debug("I'm back")
 
 
 main()
