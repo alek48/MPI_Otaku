@@ -317,7 +317,7 @@ def ReceiveMessage():
                 changeState(STATES.INSECTION)
                 info("Wchodzę na salę")
             else:
-                debug(f"Can't join - RG={RoomGas} SG={SelfGas} M={M}, wq={[x.__str__() for x in WaitQueue]}")
+                debug(f"Can't join - am={amountInRoom} RG={RoomGas} SG={SelfGas} M={M}, wq={[x.__str__() for x in WaitQueue]}")
         else:
             debug(f"Can't join - AckNum={AckNum} < {comm.Get_size() - 1}")
 
