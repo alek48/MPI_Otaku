@@ -307,10 +307,12 @@ def ReceiveMessage():
     debug(f"Otrzymałem {msg}")
 
     if CURRENT_STATE == STATES.REST:
-        onReceiveWait(msg)
+        onReceiveRest(msg)
 
     elif CURRENT_STATE == STATES.WAIT:
         onReceiveWait(msg)
+        if (CURRENT_STATE != STATES.WAIT): return
+
         if (AckNum >= comm.Get_size() - 1):
             amountInRoom = updateRoomGas()
             if (rank in [x.rank for x in WaitQueue[:amountInRoom]]):
