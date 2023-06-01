@@ -5,7 +5,7 @@ from random import random
 from time import sleep
 
 DEBUG_TO_FILE = False
-DEBUG_ENABLED = True
+DEBUG_ENABLED = False
 
 class TERMCOLORS:
     BLUE = '\033[94m'
