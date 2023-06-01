@@ -1,0 +1,94 @@
+8|42|I'm sitting in queue
+8|115|paused and out of room
+8|183|resuming
+8|198|I'm entering the room
+8|199|I'm back
+8|209|I'm sitting in queue
+8|267|paused and out of room
+8|287|resuming
+8|328|paused and out of room
+8|413|resuming
+8|427|I'm entering the room
+8|430|I'm back
+8|441|paused and out of room
+8|510|resuming
+8|515|I'm sitting in queue
+8|565|paused and out of room
+8|620|resuming
+8|644|I'm entering the room
+8|647|I'm back
+8|651|paused and out of room
+8|718|resuming
+8|724|I'm sitting in queue
+8|784|paused and out of room
+8|863|resuming
+8|885|I'm entering the room
+8|888|I'm back
+8|888|paused and out of room
+8|953|resuming
+8|953|I'm sitting in queue
+8|1008|paused and out of room
+8|1105|resuming
+8|1116|I'm entering the room
+8|1125|I'm back
+8|1125|I'm sitting in queue
+8|1180|paused and out of room
+8|1216|resuming
+8|1253|paused and out of room
+8|1336|resuming
+8|1340|I'm entering the room
+8|1345|I'm back
+8|1348|I'm sitting in queue
+8|1397|paused and out of room
+8|1424|resuming
+8|1459|paused and out of room
+8|1533|resuming
+8|1534|I'm entering the room
+8|1537|I'm back
+8|1550|I'm sitting in queue
+8|1632|paused and out of room
+8|1664|resuming
+8|1710|paused and out of room
+8|1788|resuming
+8|1789|I'm entering the room
+8|1794|I'm back
+8|1799|I'm sitting in queue
+8|1866|paused and out of room
+8|1923|resuming
+8|1965|paused and out of room
+8|1966|I'm entering the room
+8|1967|I'm back
+8|1967|I'm sitting in queue
+8|2084|paused and out of room
+8|2180|resuming
+8|2200|I'm entering the room
+8|2203|I'm back
+8|2218|paused and out of room
+8|2298|resuming
+8|2307|I'm sitting in queue
+8|2378|paused and out of room
+8|2421|resuming
+8|2450|I'm entering the room
+8|2453|I'm back
+8|2453|paused and out of room
+8|2540|resuming
+8|2545|I'm sitting in queue
+8|2592|paused and out of room
+8|2657|resuming
+8|2687|I'm entering the room
+8|2690|I'm back
+8|2691|paused and out of room
+8|2765|resuming
+8|2769|I'm sitting in queue
+8|2816|paused and out of room
+8|2884|resuming
+8|2908|I'm entering the room
+8|2909|I'm back
+8|2912|paused and out of room
+8|2980|resuming
+8|2987|I'm sitting in queue
+8|3037|paused and out of room
+8|3099|resuming
+8|3129|I'm entering the room
+8|3130|I'm back
+8|3131|paused and out of room

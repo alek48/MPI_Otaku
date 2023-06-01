@@ -1,0 +1,95 @@
+19|6|I'm sitting in queue
+19|46|I'm entering the room
+19|47|I'm back
+19|106|I'm sitting in queue
+19|174|paused and out of room
+19|183|resuming
+19|214|paused and out of room
+19|287|resuming
+19|313|I'm entering the room
+19|314|I'm back
+19|328|paused and out of room
+19|413|resuming
+19|418|I'm sitting in queue
+19|457|paused and out of room
+19|510|resuming
+19|562|I'm entering the room
+19|565|I'm back
+19|565|paused and out of room
+19|620|resuming
+19|624|I'm sitting in queue
+19|668|paused and out of room
+19|718|resuming
+19|760|I'm entering the room
+19|763|I'm back
+19|763|paused and out of room
+19|863|resuming
+19|864|I'm sitting in queue
+19|909|paused and out of room
+19|953|resuming
+19|996|I'm entering the room
+19|999|I'm back
+19|1000|paused and out of room
+19|1105|resuming
+19|1108|I'm sitting in queue
+19|1151|paused and out of room
+19|1226|resuming
+19|1249|I'm entering the room
+19|1253|I'm back
+19|1253|paused and out of room
+19|1336|resuming
+19|1339|I'm sitting in queue
+19|1387|paused and out of room
+19|1424|resuming
+19|1456|I'm entering the room
+19|1459|I'm back
+19|1459|paused and out of room
+19|1533|resuming
+19|1536|I'm sitting in queue
+19|1593|paused and out of room
+19|1664|resuming
+19|1703|I'm entering the room
+19|1704|I'm back
+19|1704|paused and out of room
+19|1788|resuming
+19|1795|I'm sitting in queue
+19|1842|paused and out of room
+19|1923|resuming
+19|1963|I'm entering the room
+19|1966|I'm back
+19|1966|paused and out of room
+19|2052|resuming
+19|2056|I'm sitting in queue
+19|2106|paused and out of room
+19|2180|resuming
+19|2207|I'm entering the room
+19|2214|I'm back
+19|2214|I'm sitting in queue
+19|2290|paused and out of room
+19|2298|resuming
+19|2378|paused and out of room
+19|2421|resuming
+19|2430|I'm entering the room
+19|2431|I'm back
+19|2447|I'm sitting in queue
+19|2522|paused and out of room
+19|2540|resuming
+19|2590|paused and out of room
+19|2657|resuming
+19|2669|I'm entering the room
+19|2672|I'm back
+19|2672|I'm sitting in queue
+19|2728|paused and out of room
+19|2765|resuming
+19|2816|paused and out of room
+19|2817|I'm entering the room
+19|2818|I'm back
+19|2818|I'm sitting in queue
+19|2913|paused and out of room
+19|2980|resuming
+19|3001|I'm entering the room
+19|3004|I'm back
+19|3007|I'm sitting in queue
+19|3076|paused and out of room
+19|3099|resuming
+19|3135|paused and out of room

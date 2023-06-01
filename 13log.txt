@@ -1,0 +1,91 @@
+13|10|I'm sitting in queue
+13|108|paused and out of room
+13|183|resuming
+13|183|I'm entering the room
+13|184|I'm back
+13|194|I'm sitting in queue
+13|243|paused and out of room
+13|287|resuming
+13|328|paused and out of room
+13|329|I'm entering the room
+13|330|I'm back
+13|425|I'm sitting in queue
+13|468|paused and out of room
+13|510|resuming
+13|565|paused and out of room
+13|566|I'm entering the room
+13|567|I'm back
+13|628|I'm sitting in queue
+13|661|paused and out of room
+13|718|resuming
+13|760|I'm entering the room
+13|763|I'm back
+13|763|paused and out of room
+13|863|resuming
+13|865|I'm sitting in queue
+13|903|paused and out of room
+13|953|resuming
+13|999|I'm entering the room
+13|1000|I'm back
+13|1005|paused and out of room
+13|1105|resuming
+13|1106|I'm sitting in queue
+13|1151|paused and out of room
+13|1216|resuming
+13|1246|I'm entering the room
+13|1249|I'm back
+13|1257|paused and out of room
+13|1336|resuming
+13|1341|I'm sitting in queue
+13|1389|paused and out of room
+13|1424|resuming
+13|1459|paused and out of room
+13|1460|I'm entering the room
+13|1461|I'm back
+13|1544|I'm sitting in queue
+13|1601|paused and out of room
+13|1664|resuming
+13|1710|paused and out of room
+13|1711|I'm entering the room
+13|1712|I'm back
+13|1796|I'm sitting in queue
+13|1835|paused and out of room
+13|1923|resuming
+13|1963|I'm entering the room
+13|1966|I'm back
+13|1967|paused and out of room
+13|2052|resuming
+13|2053|I'm sitting in queue
+13|2102|paused and out of room
+13|2180|resuming
+13|2200|I'm entering the room
+13|2201|I'm back
+13|2216|I'm sitting in queue
+13|2291|paused and out of room
+13|2299|resuming
+13|2378|paused and out of room
+13|2421|resuming
+13|2433|I'm entering the room
+13|2438|I'm back
+13|2448|I'm sitting in queue
+13|2521|paused and out of room
+13|2540|resuming
+13|2590|paused and out of room
+13|2657|resuming
+13|2672|I'm entering the room
+13|2675|I'm back
+13|2675|I'm sitting in queue
+13|2724|paused and out of room
+13|2765|resuming
+13|2816|paused and out of room
+13|2817|I'm entering the room
+13|2818|I'm back
+13|2822|I'm sitting in queue
+13|2916|paused and out of room
+13|2980|resuming
+13|3004|I'm entering the room
+13|3007|I'm back
+13|3010|I'm sitting in queue
+13|3078|paused and out of room
+13|3099|resuming
+13|3136|paused and out of room

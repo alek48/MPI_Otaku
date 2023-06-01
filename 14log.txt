@@ -1,0 +1,96 @@
+14|4|I'm sitting in queue
+14|42|I'm entering the room
+14|43|I'm back
+14|43|I'm sitting in queue
+14|111|paused and out of room
+14|183|resuming
+14|204|I'm entering the room
+14|207|I'm back
+14|207|I'm sitting in queue
+14|266|paused and out of room
+14|287|resuming
+14|328|paused and out of room
+14|413|resuming
+14|427|I'm entering the room
+14|430|I'm back
+14|433|I'm sitting in queue
+14|498|paused and out of room
+14|510|resuming
+14|565|paused and out of room
+14|620|resuming
+14|630|I'm entering the room
+14|631|I'm back
+14|651|paused and out of room
+14|718|resuming
+14|723|I'm sitting in queue
+14|775|paused and out of room
+14|863|resuming
+14|882|I'm entering the room
+14|885|I'm back
+14|886|paused and out of room
+14|953|resuming
+14|956|I'm sitting in queue
+14|1009|paused and out of room
+14|1105|resuming
+14|1125|I'm entering the room
+14|1128|I'm back
+14|1131|I'm sitting in queue
+14|1202|paused and out of room
+14|1226|resuming
+14|1254|paused and out of room
+14|1336|resuming
+14|1351|I'm entering the room
+14|1354|I'm back
+14|1355|paused and out of room
+14|1424|resuming
+14|1429|I'm sitting in queue
+14|1475|paused and out of room
+14|1533|resuming
+14|1569|I'm entering the room
+14|1572|I'm back
+14|1572|paused and out of room
+14|1664|resuming
+14|1671|I'm sitting in queue
+14|1725|paused and out of room
+14|1788|resuming
+14|1815|I'm entering the room
+14|1818|I'm back
+14|1818|paused and out of room
+14|1923|resuming
+14|1925|I'm sitting in queue
+14|1976|paused and out of room
+14|2052|resuming
+14|2071|I'm entering the room
+14|2074|I'm back
+14|2095|paused and out of room
+14|2180|resuming
+14|2189|I'm sitting in queue
+14|2243|paused and out of room
+14|2298|resuming
+14|2328|I'm entering the room
+14|2375|I'm back
+14|2375|paused and out of room
+14|2421|resuming
+14|2428|I'm sitting in queue
+14|2473|paused and out of room
+14|2540|resuming
+14|2580|I'm entering the room
+14|2581|I'm back
+14|2584|paused and out of room
+14|2657|resuming
+14|2660|I'm sitting in queue
+14|2706|paused and out of room
+14|2765|resuming
+14|2794|I'm entering the room
+14|2797|I'm back
+14|2801|paused and out of room
+14|2884|resuming
+14|2889|I'm sitting in queue
+14|2930|paused and out of room
+14|2980|resuming
+14|3004|I'm entering the room
+14|3005|I'm back
+14|3005|paused and out of room
+14|3099|resuming
+14|3107|I'm sitting in queue
+14|3154|paused and out of room

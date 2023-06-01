@@ -1,0 +1,95 @@
+11|8|I'm sitting in queue
+11|72|I'm entering the room
+11|73|I'm back
+11|91|paused and out of room
+11|183|resuming
+11|188|I'm sitting in queue
+11|230|paused and out of room
+11|287|resuming
+11|325|I'm entering the room
+11|328|I'm back
+11|329|paused and out of room
+11|413|resuming
+11|413|I'm sitting in queue
+11|454|paused and out of room
+11|510|resuming
+11|547|I'm entering the room
+11|550|I'm back
+11|563|paused and out of room
+11|620|resuming
+11|623|I'm sitting in queue
+11|664|paused and out of room
+11|718|resuming
+11|753|I'm entering the room
+11|756|I'm back
+11|759|I'm sitting in queue
+11|853|paused and out of room
+11|863|resuming
+11|887|paused and out of room
+11|953|resuming
+11|979|I'm entering the room
+11|989|I'm back
+11|994|I'm sitting in queue
+11|1079|paused and out of room
+11|1105|resuming
+11|1137|paused and out of room
+11|1216|resuming
+11|1232|I'm entering the room
+11|1235|I'm back
+11|1244|I'm sitting in queue
+11|1304|paused and out of room
+11|1336|resuming
+11|1360|paused and out of room
+11|1424|resuming
+11|1444|I'm entering the room
+11|1447|I'm back
+11|1453|I'm sitting in queue
+11|1520|paused and out of room
+11|1533|resuming
+11|1572|paused and out of room
+11|1664|resuming
+11|1691|I'm entering the room
+11|1694|I'm back
+11|1694|I'm sitting in queue
+11|1757|paused and out of room
+11|1788|resuming
+11|1822|paused and out of room
+11|1923|resuming
+11|1927|I'm entering the room
+11|1939|I'm back
+11|1948|I'm sitting in queue
+11|1994|paused and out of room
+11|2052|resuming
+11|2099|paused and out of room
+11|2100|I'm entering the room
+11|2101|I'm back
+11|2190|I'm sitting in queue
+11|2233|paused and out of room
+11|2298|resuming
+11|2375|I'm entering the room
+11|2378|I'm back
+11|2379|paused and out of room
+11|2421|resuming
+11|2424|I'm sitting in queue
+11|2471|paused and out of room
+11|2540|resuming
+11|2577|I'm entering the room
+11|2580|I'm back
+11|2583|I'm sitting in queue
+11|2647|paused and out of room
+11|2657|resuming
+11|2698|paused and out of room
+11|2765|resuming
+11|2783|I'm entering the room
+11|2784|I'm back
+11|2790|I'm sitting in queue
+11|2862|paused and out of room
+11|2884|resuming
+11|2917|paused and out of room
+11|2980|resuming
+11|2981|I'm entering the room
+11|2989|I'm back
+11|2993|I'm sitting in queue
+11|3049|paused and out of room
+11|3099|resuming
+11|3137|paused and out of room
