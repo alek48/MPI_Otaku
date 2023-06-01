@@ -292,7 +292,7 @@ def joinQueue():
     global comm, rank, clock, SelfGas, AckNum
     info("Ide stać w kolejce")
     addToQueue(rank, clock, SelfGas)
-    info(f"Kolejka = [{[x for x in WaitQueue]}]")
+    info(f"Kolejka = [{[str(x) for x in WaitQueue]}]")
     AckNum = 0
     broadcast(TAGS.REQ, SelfGas)
     changeState(STATES.WAIT)
@@ -320,7 +320,7 @@ def ReceiveMessage():
                 changeState(STATES.INSECTION)
                 info("Wchodzę na salę")
             else:
-                debug(f"Can't join - am={amountInRoom} RG={RoomGas} SG={SelfGas} M={M}, wq={[x for x in WaitQueue]}")
+                debug(f"Can't join - am={amountInRoom} RG={RoomGas} SG={SelfGas} M={M}, wq={[str(x) for x in WaitQueue]}")
         else:
             debug(f"Can't join - AckNum={AckNum} < {comm.Get_size() - 1}")
 
