@@ -1,0 +1,51 @@
+12|0|I'm sitting in queue
+12|117|I'm entering the room
+12|126|I'm back
+12|126|paused and out of room
+12|174|resuming
+12|178|I'm sitting in queue
+12|230|paused and out of room
+12|294|resuming
+12|341|I'm entering the room
+12|354|paused and out of room
+12|413|resuming
+12|427|I'm sitting in queue
+12|472|paused and out of room
+12|508|resuming
+12|591|paused and out of room
+12|592|I'm entering the room
+12|659|I'm back
+12|664|I'm sitting in queue
+12|743|paused and out of room
+12|830|resuming
+12|839|I'm entering the room
+12|844|I'm back
+12|844|I'm sitting in queue
+12|872|paused and out of room
+12|913|resuming
+12|1004|paused and out of room
+12|1043|resuming
+12|1043|I'm entering the room
+12|1050|I'm back
+12|1050|I'm sitting in queue
+12|1108|paused and out of room
+12|1130|resuming
+12|1200|I'm entering the room
+12|1204|paused and out of room
+12|1285|resuming
+12|1294|I'm sitting in queue
+12|1339|paused and out of room
+12|1370|resuming
+12|1497|paused and out of room
+12|1530|resuming
+12|1533|I'm entering the room
+12|1535|I'm back
+12|1537|I'm sitting in queue
+12|1589|paused and out of room
+12|1621|resuming
+12|1728|I'm entering the room
+12|1739|I'm back
+12|1739|paused and out of room
+12|1799|resuming
+12|1817|I'm sitting in queue
+12|1864|paused and out of room

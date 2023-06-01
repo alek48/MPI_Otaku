@@ -1,0 +1,53 @@
+2|0|I'm sitting in queue
+2|60|I'm entering the room
+2|62|I'm back
+2|62|I'm sitting in queue
+2|142|paused and out of room
+2|174|resuming
+2|214|paused and out of room
+2|215|I'm entering the room
+2|216|I'm back
+2|216|I'm sitting in queue
+2|314|paused and out of room
+2|378|resuming
+2|438|I'm entering the room
+2|458|I'm back
+2|458|I'm sitting in queue
+2|480|paused and out of room
+2|496|resuming
+2|594|paused and out of room
+2|663|resuming
+2|665|I'm entering the room
+2|696|I'm back
+2|696|I'm sitting in queue
+2|780|paused and out of room
+2|826|resuming
+2|869|I'm entering the room
+2|873|paused and out of room
+2|902|resuming
+2|905|I'm sitting in queue
+2|1013|paused and out of room
+2|1041|resuming
+2|1058|I'm entering the room
+2|1091|paused and out of room
+2|1124|resuming
+2|1128|I'm sitting in queue
+2|1220|paused and out of room
+2|1266|resuming
+2|1282|I'm entering the room
+2|1330|paused and out of room
+2|1416|resuming
+2|1440|I'm sitting in queue
+2|1502|paused and out of room
+2|1528|resuming
+2|1586|paused and out of room
+2|1660|resuming
+2|1663|I'm entering the room
+2|1699|I'm back
+2|1699|I'm sitting in queue
+2|1743|paused and out of room
+2|1784|resuming
+2|1886|paused and out of room
+2|1887|I'm entering the room
+2|1894|I'm back
+2|1894|I'm sitting in queue

@@ -1,0 +1,57 @@
+0|34|I'm sitting in queue
+0|156|replacing
+0|175|finished replacing
+0|185|I'm entering the room
+0|190|I'm back
+0|190|I'm sitting in queue
+0|245|replacing
+0|284|finished replacing
+0|353|replacing
+0|379|finished replacing
+0|380|I'm entering the room
+0|383|I'm back
+0|383|I'm sitting in queue
+0|446|replacing
+0|497|finished replacing
+0|547|I'm entering the room
+0|565|I'm back
+0|579|I'm sitting in queue
+0|627|replacing
+0|655|finished replacing
+0|788|replacing
+0|806|finished replacing
+0|806|I'm entering the room
+0|811|I'm back
+0|812|I'm sitting in queue
+0|875|replacing
+0|903|finished replacing
+0|975|I'm entering the room
+0|979|I'm back
+0|997|replacing
+0|1031|finished replacing
+0|1034|I'm sitting in queue
+0|1092|replacing
+0|1125|finished replacing
+0|1183|I'm entering the room
+0|1186|I'm back
+0|1186|I'm sitting in queue
+0|1220|replacing
+0|1263|finished replacing
+0|1333|replacing
+0|1364|finished replacing
+0|1376|I'm entering the room
+0|1448|I'm back
+0|1448|I'm sitting in queue
+0|1470|replacing
+0|1529|finished replacing
+0|1566|replacing
+0|1614|finished replacing
+0|1659|I'm entering the room
+0|1667|I'm back
+0|1680|I'm sitting in queue
+0|1761|replacing
+0|1785|finished replacing
+0|1868|replacing
+0|1868|I'm entering the room
+0|1884|I'm back
+0|1884|I'm sitting in queue

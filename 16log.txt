@@ -1,0 +1,51 @@
+16|0|I'm sitting in queue
+16|139|paused and out of room
+16|174|resuming
+16|175|I'm entering the room
+16|179|I'm back
+16|181|I'm sitting in queue
+16|230|paused and out of room
+16|304|resuming
+16|339|I'm entering the room
+16|351|paused and out of room
+16|413|resuming
+16|472|paused and out of room
+16|508|resuming
+16|514|I'm sitting in queue
+16|615|paused and out of room
+16|664|resuming
+16|733|I'm entering the room
+16|746|I'm back
+16|746|I'm sitting in queue
+16|752|paused and out of room
+16|834|resuming
+16|877|paused and out of room
+16|908|resuming
+16|909|I'm entering the room
+16|928|I'm back
+16|928|I'm sitting in queue
+16|1005|paused and out of room
+16|1045|resuming
+16|1102|paused and out of room
+16|1130|resuming
+16|1132|I'm entering the room
+16|1197|I'm back
+16|1197|I'm sitting in queue
+16|1243|paused and out of room
+16|1287|resuming
+16|1322|paused and out of room
+16|1369|resuming
+16|1388|I'm entering the room
+16|1389|I'm back
+16|1391|I'm sitting in queue
+16|1502|paused and out of room
+16|1530|resuming
+16|1586|paused and out of room
+16|1587|I'm entering the room
+16|1588|I'm back
+16|1589|I'm sitting in queue
+16|1725|paused and out of room
+16|1801|resuming
+16|1804|I'm entering the room
+16|1814|I'm back
+16|1861|paused and out of room

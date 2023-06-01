@@ -2,7 +2,9 @@ from typing import Any, List
 from mpi4py import MPI
 from enum import IntEnum
 from random import random
-import time
+from time import sleep
+
+DEBUG_TO_FILE = True
 
 class TERMCOLORS:
     BLUE = '\033[94m'
@@ -72,10 +74,11 @@ WaitQueue : List[QueueMember] = []
 LastResume : int = 0
 EmptyNum : int = 0
 AckNum: int = 0
-SelfGas: int = 0
-S: int = 1  # ilość stanowisk w sali
-X: int = 5  # ilość cuchów, po której trzeba wymienić reprezentanta
-M: int = 100  # maksymalne dozwolone stężenie cuchów na sali
+SelfGas: int = 1
+r: int = 0
+S: int = 3  # ilość stanowisk w sali
+X: int = 30  # ilość cuchów, po której trzeba wymienić reprezentanta
+M: int = 20  # maksymalne dozwolone stężenie cuchów na sali
 
 def addToQueue(rank, clock, gas):
     global WaitQueue
@@ -99,21 +102,28 @@ def multisend(tag, dest, data=None):
     clock += 1
 
 def broadcast(tag, data=None, self=False):
-    global clock, comm
+    global clock, comm, messageFreezer
     for i in range(comm.Get_size()):
-        if self or i != rank:
+        if i != rank:
             comm.send(Message(tag, data), i)
+    if self:
+        messageFreezer.append(Message(tag, data))
     clock += 1
 
 def receive() -> Message:
     global clock, status
     msg : Message = comm.recv()
-    clock += 1
+    clock = max(clock+1, msg.clock)
     return msg
 
 def debug(msg):
     global clock, rank
-    print(f"{COLORS[rank % 3]}[{rank}][{clock}] {msg}")
+    print(f"{COLORS[rank % 3]}[{rank}][{clock}] {msg}", flush=True)
+    if DEBUG_TO_FILE:
+        with open(f'{rank}log.txt', 'a') as f:
+            f.write(f'{rank}|{clock}|{msg}\n')
+
+
 
 
 def onReceivePause(msg : Message):
@@ -129,8 +139,7 @@ def onReceivePause(msg : Message):
 
     # RELEASE - Usuwa nadawcę z WaitQueue, aktualizuje RoomGas oraz InhaledGas (opisane poniżej).
     elif (msg.tag == TAGS.RELEASE):
-        removeFromQueue(msg.sender)
-        # TODO: update gas
+        messageFreezer.append(msg)
 
     # EMPTY - Ignoruje; sytuacja niemożliwa.
     elif (msg.tag == TAGS.EMPTY):
@@ -138,13 +147,9 @@ def onReceivePause(msg : Message):
 
     # RESUME - Wraca do stanu poprzedniego (lub REST, jeśli wcześniej był INSECTION), ustawia LastResume na zegar Lamporta tej wiadomości i ustawia InhaledGas na 0.
     elif (msg.tag == TAGS.RESUME):
-        if PREVIOUS_STATE == STATES.INSECTION:
-            changeState(STATES.REST)
-        else:
-            changeState(PREVIOUS_STATE)
-
+        debug('resuming')
+        changeState(PREVIOUS_STATE)
         LastResume = msg.clock
-
         InhaledGas = 0
 
 def onReceiveReplacing(msg : Message):
@@ -156,12 +161,12 @@ def onReceiveReplacing(msg : Message):
     
     # ACK - Ignoruje; sytuacja niemożliwa.
     elif (msg.tag == TAGS.ACK):
-        pass
+        messageFreezer.append(msg)
     
     # RELEASE - Usuwa nadawcę z WaitQueue, aktualizuje RoomGas oraz InhaledGas (opisane poniżej).
     elif (msg.tag == TAGS.RELEASE):
-        removeFromQueue(msg.sender)
-        # TODO: update gas
+        messageFreezer.append(msg)
+
     
     # EMPTY - Zwiększa EmptyNum o 1.
     elif (msg.tag == TAGS.EMPTY):
@@ -169,12 +174,11 @@ def onReceiveReplacing(msg : Message):
     
     # RESUME - przechodzi do stanu REST, ustawia LastResume na zegar Lamporta tej wiadomości i ustawia InhaledGas na 0.
     elif (msg.tag == TAGS.RESUME):
-        changeState(STATES.REST)
-        LastResume = msg.clock
-        InhaledGas = 0
+        pass
 
 
 def onReceiveRest(msg: Message):
+    global EmptyNum
     # REQ - dodaj nadawcę do kolejki i odeślj ACK
     if (msg.tag == TAGS.REQ):
         addToQueue(msg.sender, msg.clock, msg.data)
@@ -188,20 +192,20 @@ def onReceiveRest(msg: Message):
     # RELEASE - usuń nadawcę z kolejki, zaktualizuj RoomGas oraz InhaledGas
     elif (msg.tag == TAGS.RELEASE):
         removeFromQueue(msg.sender)
-        # TODO: aktualizuj gaz
+        updateRoomGas()
+        updateInhaledGas(msg)
 
     # EMPTY - sytuacja niemożliwa
     elif msg.tag == TAGS.EMPTY:
-        pass
-
+        EmptyNum += 1
     # RESUME - sytuacja niemożliwa
     elif msg.tag == TAGS.RESUME:
         pass
 
 def onReceiveWait(msg: Message):
-    global AckNum
+    global AckNum, EmptyNum
     if (msg.tag == TAGS.REQ):
-        addToQueue(msg.sender,msg.clock, msg.data)
+        addToQueue(msg.sender, msg.clock, msg.data)
         updateRoomGas()
         send(TAGS.ACK, msg.sender)
 
@@ -212,16 +216,18 @@ def onReceiveWait(msg: Message):
     # RELEASE - usuń nadawcę z kolejki, zaktualizuj RoomGas oraz InhaledGas
     elif (msg.tag == TAGS.RELEASE):
         removeFromQueue(msg.sender)
-        # TODO: aktualizuj gaz
+        updateRoomGas()
+        updateInhaledGas(msg)
 
     # EMPTY - sytuacja niemożliwa
     elif msg.tag == TAGS.EMPTY:
-        pass
+        EmptyNum += 1
     # RESUME - sytuacja niemożliwa
     elif msg.tag == TAGS.RESUME:
         pass
 
 def onReceiveInsection(msg: Message):
+    global EmptyNum
     if (msg.tag == TAGS.REQ):
         addToQueue(msg.sender, msg.clock, msg.data)
         updateRoomGas()
@@ -234,11 +240,12 @@ def onReceiveInsection(msg: Message):
     # RELEASE - usuń nadawcę z kolejki, zaktualizuj RoomGas oraz InhaledGas
     elif (msg.tag == TAGS.RELEASE):
         removeFromQueue(msg.sender)
-        # TODO: aktualizuj gaz
+        updateRoomGas()
+        updateInhaledGas(msg)
 
     # EMPTY - sytuacja niemożliwa
     elif msg.tag == TAGS.EMPTY:
-        pass
+        EmptyNum += 1
     # RESUME - sytuacja niemożliwa
     elif msg.tag == TAGS.RESUME:
         pass
@@ -247,67 +254,71 @@ def updateRoomGas():
     global RoomGas
 
     RoomGas = 0
-
+    i = 0
     for process in WaitQueue[:S]:
+        if RoomGas + process.gas > M:
+            break
         RoomGas += process.gas
+        i += 1
+    return i
 
 def updateInhaledGas(msg : Message):
     global InhaledGas, LastResume, rank
-
     # InhaledGas jest zwiększane o OwnGas procesu wysyłającego RELEASE pod warunkiem, że zegar Lamporta RELEASE jest większy
     #  niż zegar Lamporta ostatniego otrzymanego RESUME (LastResume).
     if msg.clock > LastResume:
         InhaledGas += msg.data
-
     # Jeżeli przedstawiciel zemdleje (InhaledGas > X), to proces:
     # Wysyła RELEASE jeśli jest INSECTION, następnie przechodzi do PAUSE, jeśli nie był nadawcą RELEASE.
     if InhaledGas > X:
-       if CURRENT_STATE == STATES.INSECTION:
-           broadcast(TAGS.RELEASE, self=True) 
+        InhaledGas = 0
+        if CURRENT_STATE == STATES.INSECTION:
+            changeState(STATES.REST)
+            broadcast(TAGS.RELEASE, SelfGas)
+            removeFromQueue(rank)
+        if rank == r:
+            changeState(STATES.REPLACING)
+            debug("replacing")
+            return
+        changeState(STATES.PAUSE)
+        debug('paused and out of room')
+        send(TAGS.EMPTY, 0)
 
-           if rank == msg.sender:
-               changeState(STATES.REPLACING)
-           else:
-               changeState(STATES.PAUSE)
-    # Przechodzi do REPLACING, jeśli był nadawcą RELEASE.
 
 def joinQueue():
     global comm, rank, clock, SelfGas, AckNum
     debug("I'm sitting in queue")
     addToQueue(rank, clock, SelfGas)
-    updateRoomGas()
+    AckNum = 0
     broadcast(TAGS.REQ, SelfGas)
     changeState(STATES.WAIT)
-    AckNum = 0
 
 def ReceiveMessage():
-    global comm, SelfGas, rank, clock, AckNum, RoomGas
+    global comm, SelfGas, rank, clock, AckNum, RoomGas, messageFreezer, EmptyNum, LastResume, EmptyNum, InhaledGas
 
-    msg = receive()
-    debug(f"Received {msg}")
+    if CURRENT_STATE in (STATES.REST, STATES.INSECTION, STATES.WAIT) and len(messageFreezer):
+        msg = messageFreezer.pop(0)
+    else:
+        msg = receive()
+    # debug(f"Received {msg}")
 
     if CURRENT_STATE == STATES.REST:
         onReceiveWait(msg)
-        if random() > 0.667:
-            joinQueue()
 
     elif CURRENT_STATE == STATES.WAIT:
         onReceiveWait(msg)
         if (AckNum >= comm.Get_size() - 1):
-            if (rank in [x.rank for x in WaitQueue[:S]]):
-                if (RoomGas < M):
-                    changeState(STATES.INSECTION)
-                    debug("I'm entering the room")
-                else:
-                    debug(f"Can't join - RG={RoomGas} SG={SelfGas} M={M}")
+            amountInRoom = updateRoomGas()
+            if (rank in [x.rank for x in WaitQueue[:amountInRoom]]):
+                changeState(STATES.INSECTION)
+                debug("I'm entering the room")
+
             else:
-                wqs = ""
-                for x in WaitQueue:
-                    wqs += x.__str__()
-                    wqs += ", "
-                debug(f"Can't join - Rank, my rank={rank} wq={wqs}")
+                pass
+                # debug(f"Can't join - RG={RoomGas} SG={SelfGas} M={M}")
         else:
-            debug(f"Can't join - AckNum={AckNum} < {comm.Get_size() - 1}")
+            pass
+            # debug(f"Can't join - AckNum={AckNum} < {comm.Get_size() - 1}")
         # if (AckNum >= comm.Get_size() - 1) and (rank in [x.rank for x in WaitQueue[:S]]) and (
         #         RoomGas + SelfGas < M):
             # changeState(STATES.INSECTION)
@@ -315,7 +326,6 @@ def ReceiveMessage():
 
     elif CURRENT_STATE == STATES.INSECTION:
         onReceiveInsection(msg)
-        
 
     elif CURRENT_STATE == STATES.PAUSE:
         onReceivePause(msg)
@@ -326,34 +336,41 @@ def ReceiveMessage():
         # Proces i przebywa w stanie REPLACING dopóki nie otrzyma EMPTY od wszystkich innych procesów, 
         # wtedy rozsyła on RESUME do wszystkich procesów, wliczając siebie.
         if EmptyNum + 1 == comm.Get_size():
-            broadcast(TAGS.RESUME, self=True)
+            EmptyNum = 0
+            LastResume = msg.clock
+            InhaledGas = 0
+            broadcast(TAGS.RESUME)
+            debug('finished replacing')
+            changeState(PREVIOUS_STATE)
 
     else:
         debug("Invalid state")
 
 
 def main():
-    global SelfGas, comm
+    global SelfGas, comm, rank
 
-    SelfGas = round(random() * 100)
-    time.sleep(random() * 3)
+    if DEBUG_TO_FILE:
+        with open(f'{rank}log.txt', 'w') as f:
+            f.write('')
+
+    SelfGas = max(1, round(random() * 10))
 
     while True:
-        received = comm.Iprobe()
+        received = comm.Iprobe() or (len(messageFreezer) and CURRENT_STATE in (STATES.REST, STATES.WAIT, STATES.INSECTION))
 
         if received:
             ReceiveMessage()
         else:
             # do stuff while waiting for message
-            if CURRENT_STATE == STATES.REST:
-                time.sleep(4)
+            if CURRENT_STATE == STATES.REST and (not (rank in (x.rank for x in WaitQueue))) and random()>0.5:
+                sleep(2*random())
                 joinQueue()
-            elif CURRENT_STATE == STATES.INSECTION:
-                time.sleep(random() * 10 + 10)
-                broadcast(TAGS.RELEASE, SelfGas)
-                removeFromQueue(rank)
-                updateInhaledGas(Message(TAGS.RELEASE, SelfGas))
+            elif CURRENT_STATE == STATES.INSECTION and random() > 0.5:
+                sleep(2*random())
+
                 changeState(STATES.REST)
+                broadcast(TAGS.RELEASE, SelfGas, self=True)
                 debug("I'm back")
 
 

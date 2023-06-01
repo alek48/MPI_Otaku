@@ -1,0 +1,56 @@
+9|0|I'm sitting in queue
+9|86|I'm entering the room
+9|89|I'm back
+9|100|I'm sitting in queue
+9|151|paused and out of room
+9|174|resuming
+9|245|paused and out of room
+9|283|resuming
+9|285|I'm entering the room
+9|287|I'm back
+9|287|I'm sitting in queue
+9|357|paused and out of room
+9|378|resuming
+9|410|I'm entering the room
+9|433|I'm back
+9|433|I'm sitting in queue
+9|472|paused and out of room
+9|502|resuming
+9|591|paused and out of room
+9|654|resuming
+9|655|I'm entering the room
+9|659|I'm back
+9|662|I'm sitting in queue
+9|797|paused and out of room
+9|805|resuming
+9|814|I'm entering the room
+9|823|I'm back
+9|825|I'm sitting in queue
+9|882|paused and out of room
+9|906|resuming
+9|1006|paused and out of room
+9|1007|I'm entering the room
+9|1011|I'm back
+9|1011|I'm sitting in queue
+9|1092|paused and out of room
+9|1129|resuming
+9|1185|I'm entering the room
+9|1199|I'm back
+9|1199|I'm sitting in queue
+9|1245|paused and out of room
+9|1284|resuming
+9|1322|paused and out of room
+9|1399|resuming
+9|1403|I'm entering the room
+9|1413|I'm back
+9|1415|I'm sitting in queue
+9|1499|paused and out of room
+9|1534|resuming
+9|1591|paused and out of room
+9|1643|resuming
+9|1644|I'm entering the room
+9|1660|I'm back
+9|1709|I'm sitting in queue
+9|1753|paused and out of room
+9|1794|resuming
+9|1860|paused and out of room
