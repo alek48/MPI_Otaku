@@ -119,7 +119,7 @@ def receive() -> Message:
 
 def debug(msg):
     if DEBUG_ENABLED:
-        info("[D!]" + msg)
+        info("[D!] " + msg)
 
 def info(msg):
     global clock, rank
@@ -284,7 +284,7 @@ def updateInhaledGas(msg : Message):
             info("Wymieniam przedstawiciela")
             return
         changeState(STATES.PAUSE)
-        info('Pauzuje działanie i wychodze z sali')
+        info(f'Przedstawiciel umarł przez [{msg.sender}] i pauzuje działanie i wychodze z sali')
         send(TAGS.EMPTY, 0)
 
 
