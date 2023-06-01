@@ -119,7 +119,7 @@ def receive() -> Message:
 
 def debug(msg):
     if DEBUG_ENABLED:
-        info(msg)
+        info("[D!]" + msg)
 
 def info(msg):
     global clock, rank
@@ -303,7 +303,8 @@ def ReceiveMessage():
         msg = messageFreezer.pop(0)
     else:
         msg = receive()
-    # debug(f"Received {msg}")
+    
+    debug(f"Otrzymałem {msg}")
 
     if CURRENT_STATE == STATES.REST:
         onReceiveWait(msg)
