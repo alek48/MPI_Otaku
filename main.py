@@ -4,7 +4,8 @@ from enum import IntEnum
 from random import random
 from time import sleep
 
-DEBUG_TO_FILE = True
+DEBUG_TO_FILE = False
+DEBUG_ENABLED = True
 
 class TERMCOLORS:
     BLUE = '\033[94m'
@@ -117,13 +118,15 @@ def receive() -> Message:
     return msg
 
 def debug(msg):
+    if DEBUG_ENABLED:
+        info(msg)
+
+def info(msg):
     global clock, rank
     print(f"{COLORS[rank % 3]}[{rank}][{clock}] {msg}", flush=True)
     if DEBUG_TO_FILE:
         with open(f'{rank}log.txt', 'a') as f:
             f.write(f'{rank}|{clock}|{msg}\n')
-
-
 
 
 def onReceivePause(msg : Message):
@@ -147,7 +150,7 @@ def onReceivePause(msg : Message):
 
     # RESUME - Wraca do stanu poprzedniego (lub REST, jeśli wcześniej był INSECTION), ustawia LastResume na zegar Lamporta tej wiadomości i ustawia InhaledGas na 0.
     elif (msg.tag == TAGS.RESUME):
-        debug('resuming')
+        info('Wracam z pauzy')
         changeState(PREVIOUS_STATE)
         LastResume = msg.clock
         InhaledGas = 0
@@ -278,16 +281,16 @@ def updateInhaledGas(msg : Message):
             removeFromQueue(rank)
         if rank == r:
             changeState(STATES.REPLACING)
-            debug("replacing")
+            info("Wymieniam przedstawiciela")
             return
         changeState(STATES.PAUSE)
-        debug('paused and out of room')
+        info('Pauzuje działanie i wychodze z sali')
         send(TAGS.EMPTY, 0)
 
 
 def joinQueue():
     global comm, rank, clock, SelfGas, AckNum
-    debug("I'm sitting in queue")
+    info("Ide stać w kolejce")
     addToQueue(rank, clock, SelfGas)
     AckNum = 0
     broadcast(TAGS.REQ, SelfGas)
@@ -311,18 +314,11 @@ def ReceiveMessage():
             amountInRoom = updateRoomGas()
             if (rank in [x.rank for x in WaitQueue[:amountInRoom]]):
                 changeState(STATES.INSECTION)
-                debug("I'm entering the room")
-
+                info("Wchodzę na salę")
             else:
-                pass
-                # debug(f"Can't join - RG={RoomGas} SG={SelfGas} M={M}")
+                debug(f"Can't join - RG={RoomGas} SG={SelfGas} M={M}, wq={[x.__str__() for x in WaitQueue]}")
         else:
-            pass
-            # debug(f"Can't join - AckNum={AckNum} < {comm.Get_size() - 1}")
-        # if (AckNum >= comm.Get_size() - 1) and (rank in [x.rank for x in WaitQueue[:S]]) and (
-        #         RoomGas + SelfGas < M):
-            # changeState(STATES.INSECTION)
-            # debug("I'm entering the room")
+            debug(f"Can't join - AckNum={AckNum} < {comm.Get_size() - 1}")
 
     elif CURRENT_STATE == STATES.INSECTION:
         onReceiveInsection(msg)
@@ -340,7 +336,7 @@ def ReceiveMessage():
             LastResume = msg.clock
             InhaledGas = 0
             broadcast(TAGS.RESUME)
-            debug('finished replacing')
+            info('Wymieniłem reprezentanta')
             changeState(PREVIOUS_STATE)
 
     else:
@@ -355,6 +351,7 @@ def main():
             f.write('')
 
     SelfGas = max(1, round(random() * 10))
+    info(f"Budzę się z SelfGas={SelfGas}")
 
     while True:
         received = comm.Iprobe() or (len(messageFreezer) and CURRENT_STATE in (STATES.REST, STATES.WAIT, STATES.INSECTION))
@@ -371,7 +368,7 @@ def main():
 
                 changeState(STATES.REST)
                 broadcast(TAGS.RELEASE, SelfGas, self=True)
-                debug("I'm back")
+                info("Wychodzę z sali")
 
 
 main()
