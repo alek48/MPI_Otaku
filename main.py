@@ -312,6 +312,7 @@ def ReceiveMessage():
             if (rank in [x.rank for x in WaitQueue[:amountInRoom]]):
                 changeState(STATES.INSECTION)
                 debug("I'm entering the room")
+
             else:
                 pass
                 # debug(f"Can't join - RG={RoomGas} SG={SelfGas} M={M}")
@@ -365,9 +366,9 @@ def main():
             if CURRENT_STATE == STATES.REST and (not (rank in (x.rank for x in WaitQueue))) and random()>0.5:
                 sleep(2*random())
                 joinQueue()
-
             elif CURRENT_STATE == STATES.INSECTION and random() > 0.5:
                 sleep(2*random())
+
                 changeState(STATES.REST)
                 broadcast(TAGS.RELEASE, SelfGas, self=True)
                 debug("I'm back")
