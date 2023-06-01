@@ -275,6 +275,7 @@ def joinQueue():
     global comm, rank, clock, SelfGas, AckNum
     debug("I'm sitting in queue")
     addToQueue(rank, clock, SelfGas)
+    updateRoomGas()
     broadcast(TAGS.REQ, SelfGas)
     changeState(STATES.WAIT)
     AckNum = 0
@@ -294,7 +295,7 @@ def ReceiveMessage():
         onReceiveWait(msg)
         if (AckNum >= comm.Get_size() - 1):
             if (rank in [x.rank for x in WaitQueue[:S]]):
-                if (RoomGas + SelfGas < M):
+                if (RoomGas < M):
                     changeState(STATES.INSECTION)
                     debug("I'm entering the room")
                 else:
@@ -348,7 +349,7 @@ def main():
                 time.sleep(4)
                 joinQueue()
             elif CURRENT_STATE == STATES.INSECTION:
-                time.sleep(random() * 10)
+                time.sleep(random() * 10 + 10)
                 broadcast(TAGS.RELEASE, SelfGas)
                 removeFromQueue(rank)
                 updateInhaledGas(Message(TAGS.RELEASE, SelfGas))
